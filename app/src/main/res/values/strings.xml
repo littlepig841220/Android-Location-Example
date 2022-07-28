@@ -1,0 +1,16 @@
+<resources>
+    <!--
+    -->
+    <string name="app_name">LocationExample</string>
+    <string name="no_location_detected">No location detected. Make sure location is enabled on the device.</string>
+    <string name="location_updated_message">Location updated</string>
+    <string name="textView3">Basic method</string>
+    <string name="method_1">Method 1</string>
+    <string name="method_2">Method 2</string>
+    <string name="textView7">Manual update</string>
+    <string name="textView4">Auto update</string>
+    <string name="textView8">Service in Background</string>
+    <string name="textView9">Geofences</string>
+    <string name="textView10">Map</string>
+    <string name="textView11">The method 1 is use new Android Location API.\nMethod 2 is old function from GoogleApiClient.\nSuggest use new API(method 1).</string>
+</resources>
