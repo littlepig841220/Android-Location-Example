@@ -49,6 +49,10 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(getApplicationContext(), LocationSettingActivity2.class));
                 break;
             }
+            case R.id.button7:{
+                startActivity(new Intent(getApplicationContext(), BackgroundActivity.class));
+                break;
+            }
         }
     }
 
