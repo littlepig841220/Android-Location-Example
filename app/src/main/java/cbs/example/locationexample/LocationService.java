@@ -28,8 +28,6 @@ import java.util.Date;
 
 public class LocationService extends Service {
     private LocationBinder locationBinder;
-    //public FusedLocationProviderClient fusedLocationClient;
-    //public LocationRequest locationRequest;
     private Handler handler = new Handler();
     private ShowTimeRunnable showTimeRunnable = new ShowTimeRunnable();
     private int CountTime = 1;
