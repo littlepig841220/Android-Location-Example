@@ -1,4 +1,4 @@
-package cbs.example.locationexample;
+package cbs.example.locationexample.method1;
 
 import android.Manifest;
 import android.content.IntentSender;
@@ -33,7 +33,9 @@ import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.util.Date;
 
-public class LocationSettingActivity extends AppCompatActivity implements OnSuccessListener<Location>, CompoundButton.OnCheckedChangeListener{
+import cbs.example.locationexample.R;
+
+public class AutoUpdateActivity extends AppCompatActivity implements OnSuccessListener<Location>, CompoundButton.OnCheckedChangeListener{
     private TextView textView, textView2;
     private Switch aSwitch;
     private LocationRequest locationRequest;
@@ -153,7 +155,7 @@ public class LocationSettingActivity extends AppCompatActivity implements OnSucc
                         // Show the dialog by calling startResolutionForResult(),
                         // and check the result in onActivityResult().
                         ResolvableApiException resolvable = (ResolvableApiException) e;
-                        resolvable.startResolutionForResult(LocationSettingActivity.this,
+                        resolvable.startResolutionForResult(AutoUpdateActivity.this,
                                 REQUEST_CHECK_SETTINGS);
                     } catch (IntentSender.SendIntentException sendEx) {
                         // Ignore the error.

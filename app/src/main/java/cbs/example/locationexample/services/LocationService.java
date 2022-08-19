@@ -1,4 +1,4 @@
-package cbs.example.locationexample;
+package cbs.example.locationexample.services;
 
 import android.Manifest;
 import android.app.Service;
@@ -25,6 +25,8 @@ import com.google.android.gms.location.LocationResult;
 import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.util.Date;
+
+import cbs.example.locationexample.R;
 
 public class LocationService extends Service {
     private LocationBinder locationBinder;

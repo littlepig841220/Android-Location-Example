@@ -1,4 +1,4 @@
-package cbs.example.locationexample;
+package cbs.example.locationexample.method1;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +35,10 @@ import com.google.android.gms.tasks.Task;
 import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.util.Date;
+
+import cbs.example.locationexample.R;
+import cbs.example.locationexample.TestActivity;
+import cbs.example.locationexample.services.LocationService;
 
 public class BackgroundActivity extends AppCompatActivity implements OnSuccessListener<Location> , View.OnClickListener{
     private TextView textView, textView2;
@@ -95,7 +99,7 @@ public class BackgroundActivity extends AppCompatActivity implements OnSuccessLi
 
     @Override
     public void onClick(View view) {
-        startActivity(new Intent(getApplicationContext(),TestActivity.class));
+        startActivity(new Intent(getApplicationContext(), TestActivity.class));
         //finish();
     }
 

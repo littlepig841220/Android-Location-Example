@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -19,10 +22,13 @@
         android:theme="@style/Theme.LocationExample"
         tools:targetApi="31">
         <activity
+            android:name=".method1.GeofenceActivity"
+            android:exported="false" />
+        <activity
             android:name=".TestActivity"
             android:exported="false" />
         <activity
-            android:name=".BackgroundActivity"
+            android:name=".method1.BackgroundActivity"
             android:exported="false" />
         <activity
             android:name=".MenuActivity"
@@ -34,27 +40,27 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".BasicActivity"
+            android:name=".method1.BasicActivity"
             android:exported="false" />
         <activity
-            android:name=".BasicActivity2"
+            android:name=".method2.BasicActivity2"
             android:exported="false" />
         <activity
-            android:name=".LocationSettingActivity"
+            android:name=".method1.AutoUpdateActivity"
             android:exported="false" />
         <activity
-            android:name=".LocationSettingActivity2"
+            android:name=".method2.AutoUpdateActivity2"
             android:exported="false" />
         <activity
             android:name=".RequestLocationActivity"
             android:exported="false" />
 
         <service
-            android:name=".LocationService"
+            android:name=".services.LocationService"
             android:enabled="true"
             android:foregroundServiceType="location" />
 
-        <receiver android:name=".BackgroundActivity" />
+        <receiver android:name=".method1.BackgroundActivity" />
     </application>
 
 </manifest>

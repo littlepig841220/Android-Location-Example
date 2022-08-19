@@ -1,4 +1,4 @@
-package cbs.example.locationexample;
+package cbs.example.locationexample.method2;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,7 +33,9 @@ import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.util.Date;
 
-public class LocationSettingActivity2 extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+import cbs.example.locationexample.R;
+
+public class AutoUpdateActivity2 extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
         ResultCallback<LocationSettingsResult>,

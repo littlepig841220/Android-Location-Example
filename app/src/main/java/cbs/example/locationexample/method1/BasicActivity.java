@@ -1,4 +1,4 @@
-package cbs.example.locationexample;
+package cbs.example.locationexample.method1;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -16,6 +16,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.text.MessageFormat;
 import java.util.Date;
+
+import cbs.example.locationexample.R;
 
 public class BasicActivity extends AppCompatActivity {
     private TextView textView;

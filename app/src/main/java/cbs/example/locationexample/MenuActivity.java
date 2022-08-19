@@ -13,6 +13,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import cbs.example.locationexample.method1.AutoUpdateActivity;
+import cbs.example.locationexample.method1.BackgroundActivity;
+import cbs.example.locationexample.method1.BasicActivity;
+import cbs.example.locationexample.method1.GeofenceActivity;
+import cbs.example.locationexample.method2.AutoUpdateActivity2;
+import cbs.example.locationexample.method2.BasicActivity2;
+
 public class MenuActivity extends AppCompatActivity implements View.OnClickListener{
     int PERMISSION_ALL = 1;
     String[] PERMISSIONS = {
@@ -34,23 +41,27 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.button:{
-                startActivity(new Intent(getApplicationContext(),BasicActivity.class));
+                startActivity(new Intent(getApplicationContext(), BasicActivity.class));
                 break;
             }
             case R.id.button2:{
-                startActivity(new Intent(getApplicationContext(),BasicActivity2.class));
+                startActivity(new Intent(getApplicationContext(), BasicActivity2.class));
                 break;
             }
             case R.id.button3:{
-                startActivity(new Intent(getApplicationContext(), LocationSettingActivity.class));
+                startActivity(new Intent(getApplicationContext(), AutoUpdateActivity.class));
                 break;
             }
             case R.id.button4:{
-                startActivity(new Intent(getApplicationContext(), LocationSettingActivity2.class));
+                startActivity(new Intent(getApplicationContext(), AutoUpdateActivity2.class));
                 break;
             }
             case R.id.button7:{
                 startActivity(new Intent(getApplicationContext(), BackgroundActivity.class));
+                break;
+            }
+            case R.id.button9:{
+                startActivity(new Intent(getApplicationContext(), GeofenceActivity.class));
                 break;
             }
         }

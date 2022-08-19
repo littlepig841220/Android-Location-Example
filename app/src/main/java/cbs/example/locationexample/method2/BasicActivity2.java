@@ -1,4 +1,4 @@
-package cbs.example.locationexample;
+package cbs.example.locationexample.method2;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +19,8 @@ import com.google.android.gms.location.LocationServices;
 
 import java.text.MessageFormat;
 import java.util.Date;
+
+import cbs.example.locationexample.R;
 
 public class BasicActivity2 extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private TextView textView;
