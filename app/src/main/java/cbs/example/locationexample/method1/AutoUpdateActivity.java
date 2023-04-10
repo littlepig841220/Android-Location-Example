@@ -147,7 +147,7 @@ public class AutoUpdateActivity extends AppCompatActivity implements OnSuccessLi
         task.addOnFailureListener(this, new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(),"Something is wrong",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Something is wrong" + e.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
                 if (e instanceof ResolvableApiException) {
                     // Location settings are not satisfied, but this can be fixed
                     // by showing the user a dialog.
