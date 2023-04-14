@@ -10,28 +10,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import cbs.example.locationexample.method1.AutoUpdateActivity;
-import cbs.example.locationexample.method1.BackgroundActivity;
-import cbs.example.locationexample.method1.BasicActivity;
-import cbs.example.locationexample.method1.GeofenceActivity;
-import cbs.example.locationexample.method2.AutoUpdateActivity2;
-import cbs.example.locationexample.method2.BasicActivity2;
+import cbs.example.locationexample.fusedlocationproviderclient.FLPCAutoUpdateActivity;
+import cbs.example.locationexample.fusedlocationproviderclient.FLPCBasicActivity;
+import cbs.example.locationexample.googleapiclient.GACAutoUpdateActivity;
+import cbs.example.locationexample.googleapiclient.GACBasicActivity;
 
 public class MenuActivity extends AppCompatActivity implements View.OnClickListener{
-    int PERMISSION_ALL = 1;
-    String[] PERMISSIONS = {
-            Manifest.permission.ACCESS_COARSE_LOCATION,
+    private int PERMISSION_ALL = 1;
+    private String[] PERMISSIONS = {Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_BACKGROUND_LOCATION
-    };
+            Manifest.permission.ACCESS_BACKGROUND_LOCATION};
+
+    public static String TAG = "CBSAndy";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        Log.i(TAG, "MenuActivity onCreate");
 
         if (!hasPermissions(this, PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
@@ -40,30 +40,31 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.button:{
-                startActivity(new Intent(getApplicationContext(), BasicActivity.class));
+        switch (view.getTag().toString()) {
+            case "GACBasic": {
+                startActivity(new Intent(getApplicationContext(), GACBasicActivity.class));
                 break;
             }
-            case R.id.button2:{
-                startActivity(new Intent(getApplicationContext(), BasicActivity2.class));
+            case "GACManualUpdate": {
                 break;
             }
-            case R.id.button3:{
-                startActivity(new Intent(getApplicationContext(), AutoUpdateActivity.class));
+            case "GACAutoUpdate": {
+                startActivity(new Intent(getApplicationContext(), GACAutoUpdateActivity.class));
                 break;
             }
-            case R.id.button4:{
-                startActivity(new Intent(getApplicationContext(), AutoUpdateActivity2.class));
+            case "FLPCBasic": {
+                startActivity(new Intent(getApplicationContext(), FLPCBasicActivity.class));
                 break;
             }
-            case R.id.button7:{
-                startActivity(new Intent(getApplicationContext(), BackgroundActivity.class));
+            case "FLPCManualUpdate": {
                 break;
             }
-            case R.id.button9:{
-                startActivity(new Intent(getApplicationContext(), GeofenceActivity.class));
+            case "FLPCAutoUpdate": {
+                startActivity(new Intent(getApplicationContext(), FLPCAutoUpdateActivity.class));
                 break;
+            }
+            default: {
+                Toast.makeText(getApplicationContext(), "Unknown action", Toast.LENGTH_SHORT).show();
             }
         }
     }

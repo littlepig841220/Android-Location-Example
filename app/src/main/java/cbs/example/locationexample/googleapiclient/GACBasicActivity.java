@@ -1,4 +1,4 @@
-package cbs.example.locationexample.method2;
+package cbs.example.locationexample.googleapiclient;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,7 +22,7 @@ import java.util.Date;
 
 import cbs.example.locationexample.R;
 
-public class BasicActivity2 extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class GACBasicActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private TextView textView;
     private GoogleApiClient googleApiClient;
     private Location location;
@@ -45,15 +45,21 @@ public class BasicActivity2 extends AppCompatActivity implements GoogleApiClient
     @Override
     protected void onStart() {
         super.onStart();
-        googleApiClient.connect();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                googleApiClient.connect();
+            }
+        }).start();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (googleApiClient.isConnected()) {
+        /*if (googleApiClient.isConnected()) {
             googleApiClient.disconnect();
-        }
+        }*/
     }
 
     @Override
@@ -61,6 +67,7 @@ public class BasicActivity2 extends AppCompatActivity implements GoogleApiClient
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
+
         location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
         if (location != null) {
             textView.setText(MessageFormat.format("Provider(提供者):{0}\nAccuracy(精準度):{1}\n" +

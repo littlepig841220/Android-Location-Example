@@ -1,4 +1,4 @@
-package cbs.example.locationexample.method2;
+package cbs.example.locationexample.googleapiclient;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,7 +10,6 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -35,7 +34,7 @@ import java.util.Date;
 
 import cbs.example.locationexample.R;
 
-public class AutoUpdateActivity2 extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+public class GACAutoUpdateActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
         ResultCallback<LocationSettingsResult>,

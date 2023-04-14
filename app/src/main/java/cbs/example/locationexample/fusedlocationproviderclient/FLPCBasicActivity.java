@@ -1,4 +1,4 @@
-package cbs.example.locationexample.method1;
+package cbs.example.locationexample.fusedlocationproviderclient;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +22,7 @@ import java.util.Date;
 
 import cbs.example.locationexample.R;
 
-public class BasicActivity extends AppCompatActivity {
+public class FLPCBasicActivity extends AppCompatActivity {
     private TextView textView;
 
     @Override

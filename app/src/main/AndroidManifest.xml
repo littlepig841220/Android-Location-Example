@@ -21,15 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LocationExample"
         tools:targetApi="31">
-        <activity
-            android:name=".method1.GeofenceActivity"
-            android:exported="false" />
-        <activity
-            android:name=".TestActivity"
-            android:exported="false" />
-        <activity
-            android:name=".method1.BackgroundActivity"
-            android:exported="false" />
+
         <activity
             android:name=".MenuActivity"
             android:exported="true">
@@ -39,20 +31,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".method1.BasicActivity"
+            android:name=".fusedlocationproviderclient.FLPCBackgroundActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".fusedlocationproviderclient.FLPCBasicActivity"
             android:exported="false" />
         <activity
-            android:name=".method2.BasicActivity2"
+            android:name=".googleapiclient.GACBasicActivity"
             android:exported="false" />
         <activity
-            android:name=".method1.AutoUpdateActivity"
+            android:name=".fusedlocationproviderclient.FLPCAutoUpdateActivity"
             android:exported="false" />
         <activity
-            android:name=".method2.AutoUpdateActivity2"
-            android:exported="false" />
-        <activity
-            android:name=".RequestLocationActivity"
+            android:name=".googleapiclient.GACAutoUpdateActivity"
             android:exported="false" />
 
         <service
@@ -60,7 +54,7 @@
             android:enabled="true"
             android:foregroundServiceType="location" />
 
-        <receiver android:name=".method1.BackgroundActivity" />
+        <receiver android:name=".fusedlocationproviderclient.FLPCBackgroundActivity" />
     </application>
 
 </manifest>

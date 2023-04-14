@@ -1,28 +1,25 @@
-package cbs.example.locationexample.method1;
+package cbs.example.locationexample.fusedlocationproviderclient;
+
+import android.Manifest;
+import android.content.IntentSender;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Bundle;
+import android.os.Looper;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import android.Manifest;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.IntentSender;
-import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.os.Bundle;
-import android.os.IBinder;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
@@ -37,28 +34,26 @@ import java.text.MessageFormat;
 import java.util.Date;
 
 import cbs.example.locationexample.R;
-import cbs.example.locationexample.TestActivity;
-import cbs.example.locationexample.services.LocationService;
 
-public class BackgroundActivity extends AppCompatActivity implements OnSuccessListener<Location> , View.OnClickListener{
+public class FLPCAutoUpdateActivity extends AppCompatActivity implements OnSuccessListener<Location>, CompoundButton.OnCheckedChangeListener{
     private TextView textView, textView2;
-
-    private LocationService locationService;
-    private ServiceConnector serviceConnector = new ServiceConnector();
-    private Receiver receiver = new Receiver();
-
-    public LocationRequest locationRequest;
+    private Switch aSwitch;
+    private LocationRequest locationRequest;
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
-    public FusedLocationProviderClient fusedLocationClient;
+    private FusedLocationProviderClient fusedLocationClient;
     private Location currentLocation;
+    private boolean requestingLocationUpdates = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_background);
+        setContentView(R.layout.activity_location_seting);
 
-        textView = findViewById(R.id.textView12);
-        textView2 = findViewById(R.id.textView13);
+        textView = findViewById(R.id.textView5);
+        textView2 = findViewById(R.id.textView6);
+        aSwitch = findViewById(R.id.switch1);
+
+        aSwitch.setOnCheckedChangeListener(this);
 
         createLocationRequest();
         buildLocationSettingsRequest();
@@ -71,20 +66,19 @@ public class BackgroundActivity extends AppCompatActivity implements OnSuccessLi
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        String Action = "LocationBackgroundService";
-        IntentFilter intentFilter = new IntentFilter(Action);
-        registerReceiver(receiver,intentFilter);
-
-        bindService(new Intent(BackgroundActivity.this,LocationService.class), serviceConnector, Context.BIND_AUTO_CREATE);
+    protected void onResume() {
+        super.onResume();
+        if (requestingLocationUpdates) {
+            startLocationUpdates();
+        }
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-        //locationService.startLocationUpdate(fusedLocationClient,locationRequest);
+    protected void onPause() {
+        super.onPause();
+        if (requestingLocationUpdates){
+            stopLocationUpdates();
+        }
     }
 
     @Override
@@ -97,10 +91,36 @@ public class BackgroundActivity extends AppCompatActivity implements OnSuccessLi
         }
     }
 
+    private LocationCallback locationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(@NonNull LocationResult locationResult) {
+            super.onLocationResult(locationResult);
+            currentLocation = locationResult.getLastLocation();
+            if (currentLocation != null){
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.location_updated_message), Toast.LENGTH_SHORT).show();
+                updateLocationUI();
+            }
+            /*for (Location location : locationResult.getLocations()) {
+                currentLocation = location;
+                if (currentLocation != null){
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.location_updated_message), Toast.LENGTH_SHORT).show();
+                    updateLocationUI();
+                }
+            }*/
+        }
+    };
+
     @Override
-    public void onClick(View view) {
-        startActivity(new Intent(getApplicationContext(), TestActivity.class));
-        //finish();
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        if (compoundButton.isChecked()){
+            startLocationUpdates();
+            textView.setText("更新中的位置");
+            requestingLocationUpdates = true;
+        }else {
+            stopLocationUpdates();
+            textView.setText("最後的位置");
+            requestingLocationUpdates = false;
+        }
     }
 
     private void createLocationRequest() {
@@ -127,7 +147,7 @@ public class BackgroundActivity extends AppCompatActivity implements OnSuccessLi
         task.addOnFailureListener(this, new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(),"Something is wrong",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Something is wrong" + e.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
                 if (e instanceof ResolvableApiException) {
                     // Location settings are not satisfied, but this can be fixed
                     // by showing the user a dialog.
@@ -135,7 +155,7 @@ public class BackgroundActivity extends AppCompatActivity implements OnSuccessLi
                         // Show the dialog by calling startResolutionForResult(),
                         // and check the result in onActivityResult().
                         ResolvableApiException resolvable = (ResolvableApiException) e;
-                        resolvable.startResolutionForResult(BackgroundActivity.this,
+                        resolvable.startResolutionForResult(FLPCAutoUpdateActivity.this,
                                 REQUEST_CHECK_SETTINGS);
                     } catch (IntentSender.SendIntentException sendEx) {
                         // Ignore the error.
@@ -160,27 +180,16 @@ public class BackgroundActivity extends AppCompatActivity implements OnSuccessLi
                 DateFormat.getTimeInstance().format(new Date(currentLocation.getTime()))));
     }
 
-    class Receiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle message = intent.getExtras();
-            String value = message.getString("returnString");
-            textView2.setText(value);
-            System.out.println("returnString:" + value);
+    private void startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
         }
+        fusedLocationClient.requestLocationUpdates(locationRequest,
+                locationCallback,
+                Looper.getMainLooper());
     }
 
-    class ServiceConnector implements ServiceConnection{
-
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            locationService = ((LocationService.LocationBinder) iBinder).getService();
-            locationService.startLocationUpdate(fusedLocationClient,locationRequest);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            locationService = null;
-        }
+    private void stopLocationUpdates() {
+        fusedLocationClient.removeLocationUpdates(locationCallback);
     }
 }

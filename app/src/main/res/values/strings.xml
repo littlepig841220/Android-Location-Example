@@ -3,11 +3,12 @@
     <string name="app_name">LocationExample</string>
     <string name="no_location_detected">No location detected. Make sure location is enabled on the device.</string>
     <string name="location_updated_message">Location updated</string>
-    <string name="textView3">Basic method</string>
-    <string name="method_1">Method 1</string>
-    <string name="method_2">Method 2</string>
-    <string name="textView7">Manual update</string>
-    <string name="textView4">Auto update</string>
+    <string name="textView3">GoogleApiClient</string>
+    <string name="method_1">Basic</string>
+    <string name="method_2">Manual update</string>
+    <string name="textView4">FusedLocationProviderClient</string>
+    <string name="textView7">LocationManager</string>
+
     <string name="textView8">Service in Background</string>
     <string name="textView9">Geofence</string>
     <string name="textView10">Map</string>
