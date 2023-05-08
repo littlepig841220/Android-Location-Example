@@ -18,6 +18,7 @@ import cbs.example.locationexample.fusedlocationproviderclient.FLPCAutoUpdateAct
 import cbs.example.locationexample.fusedlocationproviderclient.FLPCBasicActivity;
 import cbs.example.locationexample.googleapiclient.GACAutoUpdateActivity;
 import cbs.example.locationexample.googleapiclient.GACBasicActivity;
+import cbs.example.locationexample.locationManager.LMBasicActivity;
 
 public class MenuActivity extends AppCompatActivity implements View.OnClickListener{
     private int PERMISSION_ALL = 1;
@@ -63,6 +64,10 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(getApplicationContext(), FLPCAutoUpdateActivity.class));
                 break;
             }
+            case "LMBasic": {
+                startActivity(new Intent(getApplicationContext(), LMBasicActivity.class));
+                break;
+            }
             default: {
                 Toast.makeText(getApplicationContext(), "Unknown action", Toast.LENGTH_SHORT).show();
             }
@@ -73,7 +78,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-            recreate();
+            //recreate();
         }else {
             Toast.makeText(getApplicationContext(),"You must permission or you can't use this app",Toast.LENGTH_SHORT).show();
         }
