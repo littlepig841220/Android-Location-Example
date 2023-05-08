@@ -1,5 +1,6 @@
 package cbs.example.locationexample.locationManager;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -8,10 +9,12 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.GnssAntennaInfo;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.provider.ProviderProperties;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,20 +28,12 @@ import java.util.List;
 import cbs.example.locationexample.MenuActivity;
 import cbs.example.locationexample.R;
 
-public class LMBasicActivity extends AppCompatActivity implements View.OnClickListener {
+public class LMManualUpdateActivity extends AppCompatActivity implements View.OnClickListener, LocationListener {
     @SuppressWarnings("FieldCanBeLocal")
     private Button buttonPassive, buttonNetwork, buttonFused, buttonGPS;
     private TextView textViewDetail, textViewUpdate;
     private LocationManager locationManager;
     private final List<String> providers = new ArrayList<>();
-    private String lastAccuracy = "null";
-    private String lastAltitude = "null";
-    private String lastBearing = "null";
-    private String lastBearingAccuracyDegrees = "null";
-    private String lastLatitude = "null";
-    private String lastLongitude = "null";
-    private String lastSpeed = "null";
-    private String lastTime = "null";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,18 +78,46 @@ public class LMBasicActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
+        locationManager.removeUpdates(this);
+        textViewUpdate.setText("");
+
         switch (v.getTag().toString()) {
             case "Passive": {
                 getLocation(LocationManager.PASSIVE_PROVIDER);
+
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    print("Permission denied");
+                } else {
+                    locationManager.requestSingleUpdate(LocationManager.PASSIVE_PROVIDER, this, Looper.getMainLooper());
+                }
                 break;
             }
             case "Network": {
                 getLocation(LocationManager.NETWORK_PROVIDER);
+
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    print("Permission denied");
+                } else {
+                    locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.getMainLooper());
+                }
                 break;
             }
             case "Fused": {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     getLocation(LocationManager.FUSED_PROVIDER);
+
+                    locationManager.getCurrentLocation(LocationManager.FUSED_PROVIDER, null, getMainExecutor(), location -> {
+                        if (location != null) {
+                            textViewUpdate.setText(MessageFormat.format("\nLast Location: {0},{1}\nLast Altitude: {2}" +
+                                            "\nLast Accuracy: {3}\nLast Time: {4}" +
+                                            "\nLast Speed: {5}\nLast Bearing: {6}" +
+                                            "\nLast Bearing Accuracy Degrees: {7}",
+                                    String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()), String.valueOf(location.getAltitude()),
+                                    location.getAccuracy(), location.getTime(),
+                                    location.getSpeed(), location.getBearing(),
+                                    location.getBearingAccuracyDegrees()));
+                        }
+                    });
                 } else {
                     print("Need Android 12");
                 }
@@ -102,12 +125,30 @@ public class LMBasicActivity extends AppCompatActivity implements View.OnClickLi
             }
             case "GPS": {
                 getLocation(LocationManager.GPS_PROVIDER);
+
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    print("Permission denied");
+                } else {
+                    locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, Looper.getMainLooper());
+                }
                 break;
             }
             default: {
                 print("Unknown action");
             }
         }
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        textViewUpdate.setText(MessageFormat.format("\nLast Location: {0},{1}\nLast Altitude: {2}" +
+                        "\nLast Accuracy: {3}\nLast Time: {4}" +
+                        "\nLast Speed: {5}\nLast Bearing: {6}" +
+                        "\nLast Bearing Accuracy Degrees: {7}",
+                String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()), String.valueOf(location.getAltitude()),
+                location.getAccuracy(), location.getTime(),
+                location.getSpeed(), location.getBearing(),
+                location.getBearingAccuracyDegrees()));
     }
 
     private void getLocation(String provider) {
@@ -134,32 +175,6 @@ public class LMBasicActivity extends AppCompatActivity implements View.OnClickLi
                 GNSSCapabilities = "Need Android 11(API 30)";
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                locationManager.getCurrentLocation(provider, null, getMainExecutor(), location -> {
-                    if (location != null) {
-                        lastAccuracy = String.valueOf(location.getAccuracy());
-                        lastAltitude = String.valueOf(location.getAltitude());
-                        lastBearing = String.valueOf(location.getBearing());
-                        lastBearingAccuracyDegrees = String.valueOf(location.getBearingAccuracyDegrees());
-                        lastLatitude = String.valueOf(location.getLatitude());
-                        lastLongitude = String.valueOf(location.getLongitude());
-                        lastSpeed = String.valueOf(location.getSpeed());
-                        lastTime = String.valueOf(location.getTime());
-                    }
-                });
-            } else {
-                Location lastLocation = locationManager.getLastKnownLocation(provider);
-                if (lastLocation != null) {
-                    lastAccuracy = String.valueOf(lastLocation.getAccuracy());
-                    lastAltitude = String.valueOf(lastLocation.getAltitude());
-                    lastBearing = String.valueOf(lastLocation.getBearing());
-                    lastBearingAccuracyDegrees = String.valueOf(lastLocation.getBearingAccuracyDegrees());
-                    lastLatitude = String.valueOf(lastLocation.getLatitude());
-                    lastLongitude = String.valueOf(lastLocation.getLongitude());
-                    lastSpeed = String.valueOf(lastLocation.getSpeed());
-                    lastTime = String.valueOf(lastLocation.getTime());
-                }
-            }
             String GNSSHardwareModelName = locationManager.getGnssHardwareModelName();
             String GNSSYearOfHardware = String.valueOf(locationManager.getGnssYearOfHardware());
 
@@ -196,15 +211,6 @@ public class LMBasicActivity extends AppCompatActivity implements View.OnClickLi
                     accuracy, powerUsage,
                     GNSSAntennaInformation, GNSSCapabilities,
                     GNSSHardwareModelName, GNSSYearOfHardware));
-
-            textViewUpdate.setText(MessageFormat.format("\nLast Location: {0},{1}\nLast Altitude: {2}" +
-                            "\nLast Accuracy: {3}\nLast Time: {4}" +
-                            "\nLast Speed: {5}\nLast Bearing: {6}" +
-                            "\nLast Bearing Accuracy Degrees: {7}",
-                    lastLatitude, lastLongitude, lastAltitude,
-                    lastAccuracy, lastTime,
-                    lastSpeed, lastBearing,
-                    lastBearingAccuracyDegrees));
         }
     }
 

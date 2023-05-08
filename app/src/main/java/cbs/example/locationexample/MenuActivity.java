@@ -19,6 +19,7 @@ import cbs.example.locationexample.fusedlocationproviderclient.FLPCBasicActivity
 import cbs.example.locationexample.googleapiclient.GACAutoUpdateActivity;
 import cbs.example.locationexample.googleapiclient.GACBasicActivity;
 import cbs.example.locationexample.locationManager.LMBasicActivity;
+import cbs.example.locationexample.locationManager.LMManualUpdateActivity;
 
 public class MenuActivity extends AppCompatActivity implements View.OnClickListener{
     private int PERMISSION_ALL = 1;
@@ -66,6 +67,10 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
             }
             case "LMBasic": {
                 startActivity(new Intent(getApplicationContext(), LMBasicActivity.class));
+                break;
+            }
+            case "LMManualUpdate": {
+                startActivity(new Intent(getApplicationContext(), LMManualUpdateActivity.class));
                 break;
             }
             default: {
