@@ -21,6 +21,9 @@
         android:theme="@style/Theme.LocationExample"
         tools:targetApi="31">
         <activity
+            android:name=".locationManager.LMAutoUpdateActivity"
+            android:exported="false" />
+        <activity
             android:name=".locationManager.LMManualUpdateActivity"
             android:exported="false" />
         <activity

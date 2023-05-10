@@ -161,7 +161,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:enabled="false"
+            android:enabled="true"
             android:onClick="onClick"
             android:tag="LMAutoUpdate"
             android:text="Auto update"
